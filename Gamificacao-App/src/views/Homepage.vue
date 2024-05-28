@@ -12,16 +12,7 @@ const nome = sessionStorage.getItem('nome').split(' ')
 let saudacao
 const date = new Date()
 let hour = date.getUTCHours() + 1
-let pontuacao = 22
-let items = []
-
-fetch('http://localhost:1337/uploads/Premios_eaac173cae.json', {
-  method: 'GET'
-})
-  .then((response) => response.json())
-  .then((data) => items.push(data.premios))
-  .catch((error) => console.error('Error:', error))
-console.log(items)
+let pontuacao = 1200
 
 if (hour <= 12) {
   saudacao = 'Bom dia'
@@ -35,14 +26,45 @@ function size(item) {
   let elements = document.getElementsByClassName('item')
   for (let i = 0; i < elements.length; i++) {
     elements[i].style.height = '2rem'
+    let dadosDiv = elements[i].querySelector('#dados')
+    if (dadosDiv) {
+      elements[i].removeChild(dadosDiv)
+    }
   }
-  document.getElementById(item.first_name).style.height = '4rem'
+  document.getElementById(item.nome).style.height = '7.7rem'
+  let div = document.createElement('div')
+  div.id = 'dados'
+  div.className = 'd-flex gap-2 w-75'
+  div.innerHTML = '<br>' + item.descricao + '<br>' + 'Pontos:' + item.pontos_necessarios
+  document.getElementById(item.nome).appendChild(div)
 }
 </script>
 <script>
 export default {
   components: {
     pontos
+  },
+  data() {
+    return {
+      items: []
+    }
+  },
+  methods: {
+    fetchPremios() {
+      fetch('http://localhost:1337/uploads/Premios_eaac173cae.json', {
+        method: 'GET'
+      })
+        .then((response) => response.json())
+        .then((data) =>
+          data.premios.forEach((premio) => {
+            this.items.push(premio)
+          })
+        )
+        .catch((error) => console.error('Error:', error))
+    }
+  },
+  mounted() {
+    this.fetchPremios()
   }
 }
 </script>
@@ -71,13 +93,13 @@ export default {
   </div>
   <div class="container lista-premios">
     <div
-      class="d-flex item justify-content-left mb-4 m-3"
+      class="container d-grid item justify-content-left mb-4 m-3"
       v-for="item in items"
-      :id="item.first_name"
+      :id="item.nome"
       @click="size(item)"
     >
-      {{ item.first_name }} {{ item.last_name }}
-      <button class="btn" v-if="pontuacao > item.Points">Redeme</button>
+      {{ item.nome }}
+      <button class="btn" v-if="pontuacao > item.pontos_necessarios">Redeme</button>
     </div>
   </div>
   <Barra></Barra>
@@ -116,6 +138,7 @@ h4 {
 .item {
   border-bottom: 0.2rem solid rgba(0, 0, 0, 0.119);
   height: 2rem;
+  width: 90%;
 }
 .lista-premios {
   margin-bottom: 6rem;
