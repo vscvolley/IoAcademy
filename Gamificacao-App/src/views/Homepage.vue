@@ -13,12 +13,15 @@ let saudacao
 const date = new Date()
 let hour = date.getUTCHours() + 1
 let pontuacao = 22
-let items = [
-  { Points: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-  { Points: 21, first_name: 'Larsen', last_name: 'Shaw' },
-  { Points: 89, first_name: 'Geneva', last_name: 'Wilson' },
-  { Points: 38, first_name: 'Jami', last_name: 'Carney' }
-]
+let items = []
+
+fetch('http://localhost:1337/uploads/Premios_eaac173cae.json', {
+  method: 'GET'
+})
+  .then((response) => response.json())
+  .then((data) => items.push(data.premios))
+  .catch((error) => console.error('Error:', error))
+console.log(items)
 
 if (hour <= 12) {
   saudacao = 'Bom dia'
