@@ -12,7 +12,6 @@ const nome = sessionStorage.getItem('nome').split(' ')
 let saudacao
 const date = new Date()
 let hour = date.getUTCHours() + 1
-let pontuacao = 1200
 
 if (hour <= 12) {
   saudacao = 'Bom dia'
@@ -31,7 +30,7 @@ function size(item) {
       elements[i].removeChild(dadosDiv)
     }
   }
-  document.getElementById(item.nome).style.height = '7.7rem'
+  document.getElementById(item.nome).style.height = '8.3rem'
   let div = document.createElement('div')
   div.id = 'dados'
   div.className = 'd-flex gap-2 w-75'
@@ -46,7 +45,9 @@ export default {
   },
   data() {
     return {
-      items: []
+      items: [],
+      pontuacao: 0,
+      id: 0
     }
   },
   methods: {
@@ -61,20 +62,61 @@ export default {
           })
         )
         .catch((error) => console.error('Error:', error))
+    },
+    redimir(item) {
+      this.pontuacao -= item.pontos_necessarios
+      let dados = {
+        data: {
+          nome: sessionStorage.getItem('nome'),
+          email: sessionStorage.getItem('email'),
+          pontos: this.pontuacao.toString(),
+          nivel: sessionStorage.getItem('nivel')
+        }
+      }
+      console.log(this.id)
+      fetch(`http://localhost:1337/api/utilizadors/${this.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dados)
+      })
+        .then((response) => response.json())
+        .then((data) => console.log(data))
+        .catch((error) => {
+          console.error('Error:', error)
+        })
+    },
+    fetchpontos() {
+      fetch('http://localhost:1337/api/utilizadors/', {
+        method: 'GET'
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          data.data.forEach((user) => {
+            if (user.attributes.email == sessionStorage.getItem('email')) {
+              this.pontuacao = user.attributes.pontos
+              this.id = user.id
+              sessionStorage.setItem('nivel', user.attributes.nivel)
+            }
+          })
+        })
+        .catch((error) => console.error('Error:', error))
     }
   },
   mounted() {
     this.fetchPremios()
+    this.fetchpontos()
   }
 }
 </script>
 
 <template>
   <div class="p-2 mb-5 sticky-top" id="cabecalho">
-    <h1 class="m-3 mt-4">{{ saudacao }}, {{ nome[0] }}</h1>
+    <h1 class="m-3 mt-5">{{ saudacao }}, {{ nome[0] }}</h1>
     <div class="pontos mt-4">
       <h3>Pontos de oferta</h3>
-      <div class="d-flex mt-2 gap-2 align-items-center">
+      <div class="d-flex gap-2 align-items-center" style="height: 2rem">
         <h4>{{ pontuacao }}</h4>
         <pontos class="pontos"></pontos>
         <h6>Proxima recompensa</h6>
@@ -98,8 +140,10 @@ export default {
       :id="item.nome"
       @click="size(item)"
     >
-      {{ item.nome }}
-      <button class="btn" v-if="pontuacao > item.pontos_necessarios">Redeme</button>
+      <h5>{{ item.nome }}</h5>
+      <button class="btn" v-if="pontuacao > item.pontos_necessarios" @click="redimir(item)">
+        Redimir
+      </button>
     </div>
   </div>
   <Barra></Barra>
@@ -144,8 +188,9 @@ h4 {
   margin-bottom: 6rem;
 }
 h6 {
-  margin-left: 51%;
-  margin-bottom: 13%;
+  position: fixed;
+  left: 70%;
+  margin-bottom: 16%;
   font-size: 0.6rem;
   color: aliceblue;
 }
@@ -162,5 +207,8 @@ h6 {
   box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.35) inset;
   border: none;
   font-weight: bold;
+  height: 1.9rem;
+  align-items: center;
+  justify-content: center;
 }
 </style>
