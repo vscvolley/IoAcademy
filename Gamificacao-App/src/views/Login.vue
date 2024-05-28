@@ -10,8 +10,9 @@ let callback = async (response) => {
 
     sessionStorage.setItem('nome', payload.name)
     sessionStorage.setItem('email', payload.email)
+    sessionStorage.setItem('foto', payload.picture)
 
-    router.push('/about')
+    router.push('/homepage')
   } else {
     // The login was not successful
     console.error('Google Sign-In error:', response)
