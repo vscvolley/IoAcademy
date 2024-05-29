@@ -1,11 +1,9 @@
 <script setup>
 import Barra from '@/components/Barra.vue'
 import diamond from '@/components/icons/Diamond.vue'
-import star from '@/components/icons/Star.vue'
 import gold from '@/components/icons/Gold.vue'
 import silver from '@/components/icons/Silver.vue'
-import { onUpdated } from 'vue'
-import { ref } from 'vue'
+import star from '@/components/icons/Star.vue'
 
 if (sessionStorage.getItem('nome') == null) {
   router.push('/').then(() => location.reload())

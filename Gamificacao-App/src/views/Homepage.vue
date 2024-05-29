@@ -30,11 +30,11 @@ function size(item) {
       elements[i].removeChild(dadosDiv)
     }
   }
-  document.getElementById(item.nome).style.height = '8.3rem'
+  document.getElementById(item.nome).style.height = '15rem'
   let div = document.createElement('div')
   div.id = 'dados'
-  div.className = 'd-flex gap-2 w-75'
-  div.innerHTML = '<br>' + item.descricao + '<br>' + 'Pontos:' + item.pontos_necessarios
+  div.className = 'd-flex gap-2 w-90'
+  div.innerHTML = '<br>' + item.descrição + '<br>' + 'Pontos:' + item.pontos
   document.getElementById(item.nome).appendChild(div)
 }
 </script>
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     fetchPremios() {
-      fetch('http://localhost:1337/uploads/Premios_eaac173cae.json', {
+      fetch('http://localhost:1337/uploads/Premios_941173c8a5.json', {
         method: 'GET'
       })
         .then((response) => response.json())
@@ -64,7 +64,7 @@ export default {
         .catch((error) => console.error('Error:', error))
     },
     redimir(item) {
-      this.pontuacao -= item.pontos_necessarios
+      this.pontuacao -= item.pontos
       let dados = {
         data: {
           nome: sessionStorage.getItem('nome'),
@@ -141,9 +141,7 @@ export default {
       @click="size(item)"
     >
       <h5>{{ item.nome }}</h5>
-      <button class="btn" v-if="pontuacao > item.pontos_necessarios" @click="redimir(item)">
-        Redimir
-      </button>
+      <button class="btn" v-if="pontuacao > item.pontos" @click="redimir(item)">Redimir</button>
     </div>
   </div>
   <Barra></Barra>
