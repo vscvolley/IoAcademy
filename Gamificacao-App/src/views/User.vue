@@ -2,6 +2,8 @@
 import Barra from '@/components/Barra.vue'
 import diamond from '@/components/icons/Diamond.vue'
 import star from '@/components/icons/Star.vue'
+import gold from '@/components/icons/Gold.vue'
+import silver from '@/components/icons/Silver.vue'
 import { onUpdated } from 'vue'
 import { ref } from 'vue'
 
@@ -19,18 +21,63 @@ let premiosrecolhidos = 0
 export default {
   components: {
     diamond,
-    star
+    star,
+    silver,
+    gold
   },
   data() {
     return {
       pontos: 0,
-      items: [
-        { Points: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-        { Points: 21, first_name: 'Larsen', last_name: 'Shaw' },
-        { Points: 89, first_name: 'Geneva', last_name: 'Wilson' },
-        { Points: 38, first_name: 'Jami', last_name: 'Carney' }
-      ]
+      items: [],
+      fields: [
+        { key: 'nome', label: 'Nome' },
+        { key: 'pontos', label: 'Pontos', sortable: true },
+        { key: 'nivel', label: 'Nivel' }
+      ],
+      sortBy: 'pontos',
+      sortDesc: true
     }
+  },
+  methods: {
+    async fetchdados() {
+      fetch('http://localhost:1337/api/utilizadors/', {
+        method: 'GET'
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          data.data.forEach((user) => {
+            if (user.attributes.email == sessionStorage.getItem('email')) {
+              const dados = {
+                createdAt: user.attributes.createdAt,
+                email: user.attributes.email,
+                nivel: user.attributes.nivel,
+                nome: user.attributes.nome,
+                pontos: Number(user.attributes.pontos),
+                publishedAt: user.attributes.publishedAt,
+                updatedAt: user.attributes.updatedAt,
+                _rowVariant: 'danger'
+              }
+              this.pontos = user.attributes.pontos
+              this.items.push(dados)
+            } else {
+              const dados = {
+                createdAt: user.attributes.createdAt,
+                email: user.attributes.email,
+                nivel: user.attributes.nivel,
+                nome: user.attributes.nome,
+                pontos: Number(user.attributes.pontos),
+                publishedAt: user.attributes.publishedAt,
+                updatedAt: user.attributes.updatedAt
+              }
+              this.items.push(dados)
+            }
+          })
+        })
+        .catch((error) => console.error('Error:', error))
+    }
+  },
+  mounted() {
+    this.fetchdados()
   }
 }
 </script>
@@ -46,14 +93,16 @@ export default {
         <div class="d-flex justify-content-left align-items-center mt-1 mb-1">
           <h5 id="ranking">Ranking:</h5>
           <div id="categoria" class="d-flex text-center align-items-center">
-            <diamond v-show="pontos <= 1000"></diamond>
-            <star v-show="pontos > 1000"></star>
+            <silver v-show="pontos <= 2500"></silver>
+            <gold v-show="pontos > 2500 && pontos <= 5000"></gold>
+            <diamond v-show="pontos <= 75000 && pontos > 5000"></diamond>
+            <star v-show="pontos > 7500"></star>
           </div>
         </div>
         <h5>{{ email }}</h5>
       </div>
     </div>
-    <div class="bg-white rounded text-right p-3 mt-3">
+    <div class="bg-white rounded text-right p-3 mt-4">
       <h2 class="text-center">Status</h2>
       <h3>Total: {{ pontos }}</h3>
       <h3>Maximo atingido: {{ maxpontos }}</h3>
@@ -61,7 +110,15 @@ export default {
     </div>
     <div class="bg-white mt-3 rounded text-center" id="table">
       <h5 class="text-center mt-1">World Podium</h5>
-      <b-table sticky-header="144" :items="items" head-variant="light" striped></b-table>
+      <b-table
+        sticky-header="144"
+        :items="items"
+        :fields="fields"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
+        head-variant="light"
+        striped
+      ></b-table>
     </div>
   </div>
   <Barra></Barra>
@@ -74,6 +131,7 @@ export default {
 #foto {
   border-radius: 5rem;
   margin-top: 0.5rem;
+  height: 6rem;
 }
 #categoria {
   border: 0.2rem solid #e6ca2e;
@@ -89,7 +147,7 @@ export default {
 }
 
 #table {
-  max-height: 9rem;
+  max-height: 11rem;
   overflow-y: auto;
 }
 #ranking {
