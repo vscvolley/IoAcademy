@@ -9,10 +9,7 @@ if (sessionStorage.getItem('nome') == null) {
   router.push('/').then(() => location.reload())
 }
 
-let nome = sessionStorage.getItem('nome')
-let email = sessionStorage.getItem('email')
 let foto = sessionStorage.getItem('foto')
-let maxpontos = 0
 </script>
 <script>
 export default {
@@ -25,7 +22,7 @@ export default {
   data() {
     return {
       pontos: 0,
-      premios: sessionStorage.getItem('numero'),
+      premios: 0,
       items: [],
       fields: [
         { key: 'nome', label: 'Nome' },
@@ -33,7 +30,11 @@ export default {
         { key: 'nivel', label: 'Nivel' }
       ],
       sortBy: 'pontos',
-      sortDesc: true
+      sortDesc: true,
+      maxpontos: 0,
+      email: 'nivel@gmail.com',
+      nivel: 'oi',
+      nome: 'oi'
     }
   },
   methods: {
@@ -56,6 +57,11 @@ export default {
                 _rowVariant: 'danger'
               }
               this.pontos = user.attributes.pontos
+              this.maxpontos = user.attributes.maxpontos
+              this.nome = user.attributes.nome
+              this.email = user.attributes.email
+              this.nivel = user.attributes.nivel
+              this.premios = user.attributes.premios
               this.items.push(dados)
             } else {
               const dados = {
@@ -91,10 +97,10 @@ export default {
         <div class="d-flex justify-content-left align-items-center mt-1 mb-1">
           <h5 id="ranking">Ranking:</h5>
           <div id="categoria" class="d-flex text-center align-items-center">
-            <silver v-show="pontos <= 2500"></silver>
-            <gold v-show="pontos > 2500 && pontos <= 5000"></gold>
-            <diamond v-show="pontos <= 75000 && pontos > 5000"></diamond>
-            <star v-show="pontos > 7500"></star>
+            <silver v-show="nivel == 'silver'"></silver>
+            <gold v-show="nivel == 'gold'"></gold>
+            <diamond v-show="nivel == 'diamond'"></diamond>
+            <star v-show="nivel == 'star'"></star>
           </div>
         </div>
         <h5>{{ email }}</h5>
@@ -124,7 +130,8 @@ export default {
 
 <style scoped>
 #page {
-  width: 100vw;
+  min-width: 100vw;
+  max-width: 100vw;
 }
 #foto {
   border-radius: 5rem;
@@ -142,6 +149,7 @@ export default {
 }
 .bg-white {
   box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.25);
+  width: 100%;
 }
 
 #table {

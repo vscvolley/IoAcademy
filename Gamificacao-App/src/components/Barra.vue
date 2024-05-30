@@ -1,10 +1,11 @@
 <script setup>
+import award from '@/components/icons/Award.vue'
+import codigo from '@/components/icons/Code.vue'
+import maps from '@/components/icons/Maps.vue'
+import profile from '@/components/icons/Profile.vue'
 import router from '@/router'
 import { onMounted, onUpdated } from 'vue'
 import { useRoute } from 'vue-router'
-import profile from '@/components/icons/Profile.vue'
-import award from '@/components/icons/Award.vue'
-import maps from '@/components/icons/Maps.vue'
 
 const route = useRoute()
 
@@ -13,6 +14,7 @@ const select0 = () => {
   document.getElementById('icon-1').style.opacity = 0.5
   document.getElementById('icon-2').style.opacity = 0.5
   document.getElementById('icon-3').style.opacity = 0.5
+  document.getElementById('icon-4').style.opacity = 0.5
 
   if (routeName == 'homepage') {
     document.getElementById('icon-2').style.opacity = 1
@@ -20,6 +22,8 @@ const select0 = () => {
     document.getElementById('icon-1').style.opacity = 1
   } else if (routeName == 'location') {
     document.getElementById('icon-3').style.opacity = 1
+  } else if (routeName == 'qrcode') {
+    document.getElementById('icon-4').style.opacity = 1
   }
 }
 onMounted(select0)
@@ -39,6 +43,9 @@ function select1() {
 function select2() {
   router.push('/location')
 }
+function select3() {
+  router.push('/qrcode')
+}
 </script>
 
 <script>
@@ -47,7 +54,8 @@ export default {
   components: {
     profile,
     award,
-    maps
+    maps,
+    codigo
   }
 }
 </script>
@@ -59,6 +67,9 @@ export default {
     </li>
     <li class="nav-item">
       <award id="icon-2" class="icon my-2" @click="select1" />
+    </li>
+    <li class="nav-item">
+      <codigo id="icon-4" class="icon my-2" @click="select3" />
     </li>
     <li class="nav-item">
       <maps id="icon-3" class="icon my-2" @click="select2" />
@@ -73,7 +84,7 @@ export default {
   right: 0;
   width: 100vw;
   height: 5.5rem;
-  gap: 4rem;
+  gap: 3rem;
 }
 ul {
   background: #f5f5f5;

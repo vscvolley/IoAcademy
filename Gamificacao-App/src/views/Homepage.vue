@@ -59,12 +59,13 @@ export default {
       premios: 0,
       url: [],
       urlid: 0,
-      index: 0
+      index: 0,
+      nivel: ''
     }
   },
   methods: {
     async fetchPremios() {
-      fetch('http://localhost:1337/uploads/Premios_941173c8a5.json', {
+      fetch('http://localhost:1337/uploads/Premios_9f0820ce54.json', {
         method: 'GET'
       })
         .then((response) => response.json())
@@ -74,19 +75,18 @@ export default {
           })
         )
         .then(() => {
-          sessionStorage.setItem('premios', JSON.stringify(this.items))
+          sessionStorage.setItem('lista', JSON.stringify(this.items))
         })
         .catch((error) => console.error('Error:', error))
     },
     async redimir(item) {
       this.pontuacao -= item.pontos
-      sessionStorage.setItem('pontuacao', this.pontuacao)
       let dados = {
         data: {
           nome: sessionStorage.getItem('nome'),
           email: sessionStorage.getItem('email'),
           pontos: this.pontuacao.toString(),
-          nivel: sessionStorage.getItem('nivel'),
+          nivel: this.nivel,
           premios: this.premios + 1
         }
       }
@@ -103,7 +103,6 @@ export default {
         .catch((error) => {
           console.error('Error:', error)
         })
-      sessionStorage.setItem('numero', this.premios)
       this.progressbar()
     },
     async fetchpontos() {
@@ -117,9 +116,7 @@ export default {
               this.pontuacao = user.attributes.pontos
               this.id = user.id
               this.premios = user.attributes.premios
-              sessionStorage.setItem('numero', this.premios)
-              sessionStorage.setItem('nivel', user.attributes.nivel)
-              sessionStorage.setItem('pontuacao', this.pontuacao)
+              this.nivel = user.attributes.nivel
             }
           })
         })
@@ -127,8 +124,8 @@ export default {
     },
     progressbar() {
       let array = []
-      let array1 = JSON.parse(sessionStorage.getItem('premios'))
-      let pontos = JSON.parse(sessionStorage.getItem('pontuacao'))
+      let array1 = JSON.parse(sessionStorage.getItem('lista'))
+      let pontos = this.pontuacao
       array1.forEach((item) => {
         let conta = pontos - item.pontos
         array.push(conta)
@@ -164,11 +161,9 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     this.fetchPremios()
     this.fetchpontos()
-  },
-  created() {
     this.geturl().then(() => this.progressbar())
   }
 }
@@ -231,7 +226,8 @@ export default {
   background-repeat: no-repeat;
   background-position: right top;
   background-color: #000000;
-  backdrop-filter: blur(300px);
+  backdrop-filter: blur(400px);
+  box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.25);
 }
 
 #pontos {

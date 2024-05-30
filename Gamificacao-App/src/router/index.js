@@ -1,8 +1,9 @@
 import Barra from '@/components/Barra.vue'
 import Homepage from '@/views/Homepage.vue'
-import Login from '@/views/Login.vue'
-import User from '@/views/User.vue'
 import Location from '@/views/Location.vue'
+import Login from '@/views/Login.vue'
+import Qrcode from '@/views/Qrcode.vue'
+import User from '@/views/User.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/location',
       name: 'location',
       component: Location
+    },
+    {
+      path: '/qrcode',
+      name: 'qrcode',
+      component: Qrcode
     }
   ]
 })
