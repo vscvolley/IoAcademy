@@ -13,7 +13,6 @@ let nome = sessionStorage.getItem('nome')
 let email = sessionStorage.getItem('email')
 let foto = sessionStorage.getItem('foto')
 let maxpontos = 0
-let premiosrecolhidos = 0
 </script>
 <script>
 export default {
@@ -26,6 +25,7 @@ export default {
   data() {
     return {
       pontos: 0,
+      premios: sessionStorage.getItem('numero'),
       items: [],
       fields: [
         { key: 'nome', label: 'Nome' },
@@ -104,7 +104,7 @@ export default {
       <h2 class="text-center">Status</h2>
       <h3>Total: {{ pontos }}</h3>
       <h3>Maximo atingido: {{ maxpontos }}</h3>
-      <h3>Premios: {{ premiosrecolhidos }}</h3>
+      <h3>Premios: {{ premios }}</h3>
     </div>
     <div class="bg-white mt-3 rounded text-center" id="table">
       <h5 class="text-center mt-1">World Podium</h5>
