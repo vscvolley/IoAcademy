@@ -1,0 +1,16 @@
+{
+  "name": "Gamificação",
+  "short_name": "Gamificação",
+  "description": "A short description of my Vue PWA",
+  "start_url": "/IoAcademy/",
+  "display": "standalone",
+  "background_color": "#e54e40f7",
+  "theme_color": "#f5f5f5",
+  "icons": [
+    {
+      "src": "./assets/pngwing.com.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

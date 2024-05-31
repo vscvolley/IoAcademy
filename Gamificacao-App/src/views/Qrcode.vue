@@ -47,7 +47,7 @@ export default {
       } else if (this.nivel == 'gold') {
         this.pontuacao += 2000
         this.maxpontos += 2000
-      } else if (this.nivel == 'dimond') {
+      } else if (this.nivel == 'diamond') {
         this.pontuacao += 3000
         this.maxpontos += 3000
         console.log(this.pontuacao)
@@ -58,7 +58,7 @@ export default {
       if (this.maxpontos >= 5000 && this.maxpontos < 10000) {
         this.nivel = 'gold'
       } else if (this.maxpontos >= 10000 && this.maxpontos < 15000) {
-        this.nivel = 'dimond'
+        this.nivel = 'diamond'
       } else if (this.maxpontos >= 15000) {
         this.nivel = 'star'
       } else {
