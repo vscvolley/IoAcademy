@@ -50,7 +50,8 @@ export default {
         },
         {
           key: 'pontos',
-          lable: 'Pontos'
+          lable: 'Pontos',
+          sortable: true
         },
         {
           key: 'nivel',
