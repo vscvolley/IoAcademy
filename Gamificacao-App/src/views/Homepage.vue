@@ -2,7 +2,8 @@
 import Barra from '@/components/Barra.vue'
 import pontos from '@/components/icons/Pontos.vue'
 import router from '@/router'
-import { getDownloadURL, getStorage, listAll, ref, uploadBytesResumable } from 'firebase/storage'
+import { getDownloadURL, getStorage, listAll, ref } from 'firebase/storage'
+import { push } from 'notivue'
 
 if (sessionStorage.getItem('nome') == null) {
   router.push('/').then(() => location.reload())
@@ -63,7 +64,9 @@ export default {
       showpopup: false,
       item: {},
       nome: '',
-      nome1: ''
+      nome1: '',
+      lista: [],
+      isLoading: false
     }
   },
   methods: {
@@ -88,13 +91,16 @@ export default {
     },
     async redimir() {
       this.pontuacao -= this.item.pontos
+      this.lista.push(this.item.nome)
+      let lista1 = this.lista.join(';')
       let dados = {
         data: {
           nome: sessionStorage.getItem('nome'),
           email: sessionStorage.getItem('email'),
           pontos: this.pontuacao.toString(),
           nivel: this.nivel,
-          premios: this.premios + 1
+          premios: this.premios + 1,
+          lista: lista1
         }
       }
       this.premios += 1
@@ -106,7 +112,10 @@ export default {
         body: JSON.stringify(dados)
       })
         .then((response) => response.json())
-        .then((data) => console.log(data))
+        .then((data) => {
+          push.success('Item ' + this.item.nome + ' resgatado!')
+          console.log(data)
+        })
         .catch((error) => {
           console.error('Error:', error)
         })
@@ -125,8 +134,9 @@ export default {
               this.id = user.id
               this.premios = user.attributes.premios
               this.nivel = user.attributes.nivel
-              this.nomev = user.attributes.nome
+              this.nome = user.attributes.nome
               this.nome1 = user.attributes.nome.split(' ')
+              this.lista = user.attributes.lista.split(';')
             }
           })
         })
@@ -166,13 +176,13 @@ export default {
 
       try {
         const resposta = await listAll(dadosRef)
-        const urlPromises = resposta.items.map((item) => {
-          return getDownloadURL(item).then((url) => {
-            return {
-              nome: item.name,
-              url: url
-            }
-          })
+
+        const urlPromises = resposta.items.map(async (item) => {
+          const url = await getDownloadURL(item)
+          return {
+            nome: item.name,
+            url: url
+          }
         })
         this.url = await Promise.all(urlPromises)
       } catch (error) {
@@ -188,7 +198,7 @@ export default {
 }
 </script>
 
-<template>
+<template v-if="isLoading == false">
   <div class="p-2 pt-2 sticky-top" id="cabecalho">
     <h1 class="m-3 mt-4">{{ saudacao }}, {{ nome1[0] }}</h1>
     <div class="pontos mt-4">
@@ -240,7 +250,6 @@ export default {
       <p>Pretende resgatar o item?</p>
       <div class="d-flex" id="pergunta">
         <button class="btn btn-warning" @click="redimir()">Sim</button>
-
         <button class="btn btn-warning" @click="showpopup = false">Nao</button>
       </div>
     </div>

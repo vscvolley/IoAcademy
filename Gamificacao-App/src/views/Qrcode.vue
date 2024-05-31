@@ -1,5 +1,6 @@
 <script>
 import Barra from '@/components/Barra.vue'
+import { push } from 'notivue'
 import QrcodeVue from 'qrcode.vue'
 
 export default {
@@ -46,9 +47,10 @@ export default {
       } else if (this.nivel == 'gold') {
         this.pontuacao += 2000
         this.maxpontos += 2000
-      } else if (this.nivel == 'diamond') {
+      } else if (this.nivel == 'dimond') {
         this.pontuacao += 3000
         this.maxpontos += 3000
+        console.log(this.pontuacao)
       } else if (this.nivel == 'star') {
         this.pontuacao += 4000
         this.maxpontos += 4000
@@ -72,7 +74,6 @@ export default {
           maxpontos: this.maxpontos
         }
       }
-      console.log(dados)
       fetch(`http://localhost:1337/api/utilizadors/${this.id}`, {
         method: 'PUT',
         headers: {
@@ -81,7 +82,10 @@ export default {
         body: JSON.stringify(dados)
       })
         .then((response) => response.json())
-        .then((data) => console.log(data))
+        .then((data) => {
+          console.log(data)
+          push.success('Pontos adicionados! Novo total:' + this.pontuacao)
+        })
         .catch((error) => {
           console.error('Error:', error)
         })

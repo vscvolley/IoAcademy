@@ -1,5 +1,6 @@
 import './assets/main.css'
 
+import { createNotivue } from 'notivue'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -25,9 +26,24 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig)
 
+import 'notivue/animations.css'
+import 'notivue/notification.css' // Only needed if using built-in notifications
+const notivue = createNotivue({
+  position: 'top-center',
+  limit: 4,
+  enqueue: true,
+  avoidDuplicates: true,
+  notifications: {
+    global: {
+      duration: 2500
+    }
+  }
+})
+
 const app = createApp(App)
 
 app.use(router)
 app.use(vue3GoogleLogin, { clientId: authkey })
 app.use(BootstrapVue3)
+app.use(notivue)
 app.mount('#app')

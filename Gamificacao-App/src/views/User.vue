@@ -2,6 +2,7 @@
 import Barra from '@/components/Barra.vue'
 import diamond from '@/components/icons/Diamond.vue'
 import gold from '@/components/icons/Gold.vue'
+import marca from '@/components/icons/Marca.vue'
 import silver from '@/components/icons/Silver.vue'
 import star from '@/components/icons/Star.vue'
 
@@ -17,7 +18,8 @@ export default {
     diamond,
     star,
     silver,
-    gold
+    gold,
+    marca
   },
   data() {
     return {
@@ -35,7 +37,12 @@ export default {
       email: 'nivel@gmail.com',
       nivel: 'oi',
       nome: 'oi',
-      showpopup: false
+      showpopup: false,
+      parabens: false,
+      progress: 0,
+      lista: [],
+      showpremios: false,
+      lista1: []
     }
   },
   methods: {
@@ -63,7 +70,14 @@ export default {
               this.email = user.attributes.email
               this.nivel = user.attributes.nivel
               this.premios = user.attributes.premios
+              this.lista = user.attributes.lista.split(';')
               this.items.push(dados)
+              this.lista.forEach((elemento1) => {
+                const elemento = {
+                  nome: elemento1
+                }
+                this.lista1.push(elemento)
+              })
             } else {
               const dados = {
                 createdAt: user.attributes.createdAt,
@@ -79,6 +93,22 @@ export default {
           })
         })
         .catch((error) => console.error('Error:', error))
+    },
+    progressbar() {
+      if (this.maxpontos < 5000) {
+        this.progress = (this.maxpontos / 5000) * 100
+      } else if (this.maxpontos >= 5000 && this.maxpontos < 10000) {
+        this.progress = (this.maxpontos / 10000) * 100
+      } else if (this.maxpontos >= 10000 && this.maxpontos < 15000) {
+        this.progress = (this.maxpontos / 15000) * 100
+      } else if (this.maxpontos >= 15000) {
+        this.progress = 100
+        this.parabens = true
+      }
+    },
+    show() {
+      this.progressbar()
+      this.showpopup = true
     }
   },
   mounted() {
@@ -94,7 +124,7 @@ export default {
       <p>Soma pontos e ganha ofertas!</p>
       <p>Quanto mais pontos tiveres adequirido no total, maior é o teu ranking.</p>
       <p>Quanto maior o teu ranking mais facil é de ganhar pontos!</p>
-      <p>Ranking (pontos por scan):</p>
+      <p class="mt-2">Ranking (pontos por scan):</p>
       <div id="classificacao">
         <silver></silver>
         <h4>1000 pontos</h4>
@@ -104,6 +134,38 @@ export default {
         <h4>3000 pontos</h4>
         <star class="mt-1"></star>
         <h4>4000 pontos</h4>
+      </div>
+      <p class="mt-5" v-if="parabens == false">
+        Próximo Ranking:<gold v-show="nivel == 'silver'"></gold>
+        <diamond v-show="nivel == 'gold'"></diamond>
+        <star v-show="nivel == 'diamond'"></star>
+      </p>
+      <div
+        v-if="parabens == false"
+        class="progress mb-2"
+        role="progressbar"
+        aria-label="Basic example"
+        aria-valuenow="75"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        id="progress"
+      >
+        <div
+          v-if="parabens == false"
+          class="progress-bar bg-warning"
+          id="progress-bar"
+          v-bind:style="{ width: this.progress + '%' }"
+        ></div>
+      </div>
+      <p id="parabens" class="mt-3" v-if="parabens == true">Estas no topo da montanha, PARABÉNS!</p>
+    </div>
+  </div>
+  <div id="listapremios" v-if="showpremios == true" class="back">
+    <div class="popup rounded container">
+      <span class="close" @click="showpremios = false">&times;</span>
+      <h4 class="mt-3 mb-1">Lista de premios redimidos</h4>
+      <div class="bg-white mt-3 rounded text-center" id="table1">
+        <b-table :items="lista1" striped> </b-table>
       </div>
     </div>
   </div>
@@ -115,17 +177,14 @@ export default {
           {{ nome }}
         </h5>
         <div class="d-flex justify-content-left align-items-center mt-1 mb-1">
-          <h5 id="ranking">Ranking:</h5>
-          <div
-            id="categoria"
-            class="d-flex text-center align-items-center"
-            @click="showpopup = true"
-          >
+          <h5 id="ranking" class="m-1">Ranking:</h5>
+          <div id="categoria" class="d-flex text-center align-items-center" @click="show">
             <silver v-show="nivel == 'silver'"></silver>
             <gold v-show="nivel == 'gold'"></gold>
             <diamond v-show="nivel == 'diamond'"></diamond>
             <star v-show="nivel == 'star'"></star>
           </div>
+          <div id="interrogacao" @click="show"><marca></marca></div>
         </div>
         <h5>{{ email }}</h5>
       </div>
@@ -134,7 +193,7 @@ export default {
       <h2 class="text-center">Status</h2>
       <h3>Pontos: {{ pontos }}</h3>
       <h3>Total Pontos: {{ maxpontos }}</h3>
-      <h3>Nº Premios: {{ premios }}</h3>
+      <h3 @click="showpremios = true">Nº Premios <marca /> : {{ premios }}</h3>
     </div>
     <div class="bg-white mt-3 rounded text-center" id="table">
       <h5 class="text-center mt-1">World Podium</h5>
@@ -180,6 +239,11 @@ export default {
   max-height: 11rem;
   overflow-y: auto;
 }
+#table1 {
+  max-height: 13rem;
+  overflow-y: auto;
+  box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.15);
+}
 #ranking {
   margin-right: 1rem;
 }
@@ -219,5 +283,17 @@ export default {
 }
 #classificacao {
   text-align: center;
+}
+#progress {
+  height: 0.8em;
+  width: 90%;
+  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.164);
+}
+#interrogacao {
+  margin-left: 0.35em;
+}
+.sticky-top {
+  background: #ffffff;
+  padding: 0.2rem;
 }
 </style>

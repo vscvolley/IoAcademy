@@ -1,7 +1,17 @@
 <script setup>
+import { Notification, Notivue, NotivueSwipe } from 'notivue'
 import { RouterView } from 'vue-router'
 </script>
 
+<script>
+export default {
+  components: {
+    Notivue,
+    Notification,
+    NotivueSwipe
+  }
+}
+</script>
 <template>
   <router-view v-slot="{ Component, route }">
     <transition name="fade">
@@ -9,6 +19,11 @@ import { RouterView } from 'vue-router'
         <component :is="Component" />
       </div>
     </transition>
+    <Notivue v-slot="Component">
+      <NotivueSwipe :item="Component">
+        <Notification :item="Component" />
+      </NotivueSwipe>
+    </Notivue>
   </router-view>
 </template>
 
