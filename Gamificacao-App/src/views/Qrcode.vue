@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     async fetchdados() {
-      fetch('http://localhost:1337/api/utilizadors/', {
+      fetch('https://powerful-bubble-482d624615.strapiapp.com/api/utilizadors/', {
         method: 'GET'
       })
         .then((response) => response.json())
@@ -74,7 +74,8 @@ export default {
           maxpontos: this.maxpontos
         }
       }
-      fetch(`http://localhost:1337/api/utilizadors/${this.id}`, {
+
+      fetch(`https://powerful-bubble-482d624615.strapiapp.com/api/utilizadors/${this.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

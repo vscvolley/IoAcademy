@@ -47,11 +47,12 @@ export default {
   },
   methods: {
     async fetchdados() {
-      fetch('http://localhost:1337/api/utilizadors/', {
+      fetch('https://powerful-bubble-482d624615.strapiapp.com/api/utilizadors/', {
         method: 'GET'
       })
         .then((response) => response.json())
         .then((data) => {
+          console.log(data)
           data.data.forEach((user) => {
             if (user.attributes.email == sessionStorage.getItem('email')) {
               const dados = {

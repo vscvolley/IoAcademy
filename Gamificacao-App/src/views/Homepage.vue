@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     async fetchPremios() {
-      fetch('http://localhost:1337/uploads/Premios_f4fddbbaec.json', {
+      fetch('https://powerful-bubble-482d624615.media.strapiapp.com/Premios_2ca9dc3a99.json', {
         method: 'GET'
       })
         .then((response) => response.json())
@@ -104,7 +104,7 @@ export default {
         }
       }
       this.premios += 1
-      fetch(`http://localhost:1337/api/utilizadors/${this.id}`, {
+      fetch(`https://powerful-bubble-482d624615.strapiapp.com/api/utilizadors/${this.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -123,7 +123,7 @@ export default {
       this.progressbar()
     },
     async fetchpontos() {
-      fetch('http://localhost:1337/api/utilizadors/', {
+      fetch('https://powerful-bubble-482d624615.strapiapp.com/api/utilizadors/', {
         method: 'GET'
       })
         .then((response) => response.json())
