@@ -40,11 +40,22 @@ export default {
         .catch((error) => console.error('Error:', error))
     },
     async pontos() {
-      this.pontuacao += 2000
-      this.maxpontos += 2000
-      if (this.maxpontos >= 5000) {
+      if (this.nivel == 'silver') {
+        this.pontuacao += 1000
+        this.maxpontos += 1000
+      } else if (this.nivel == 'gold') {
+        this.pontuacao += 2000
+        this.maxpontos += 2000
+      } else if (this.nivel == 'diamond') {
+        this.pontuacao += 3000
+        this.maxpontos += 3000
+      } else if (this.nivel == 'star') {
+        this.pontuacao += 4000
+        this.maxpontos += 4000
+      }
+      if (this.maxpontos >= 5000 && this.maxpontos < 10000) {
         this.nivel = 'gold'
-      } else if (this.maxpontos >= 10000) {
+      } else if (this.maxpontos >= 10000 && this.maxpontos < 15000) {
         this.nivel = 'dimond'
       } else if (this.maxpontos >= 15000) {
         this.nivel = 'star'
@@ -76,7 +87,7 @@ export default {
         })
     }
   },
-  mounted() {
+  created() {
     this.fetchdados()
   }
 }
@@ -109,7 +120,7 @@ export default {
 }
 #qrcode {
   display: grid;
-  box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
   width: 21.5rem;
   height: 30rem;
   text-align: center;
@@ -125,6 +136,6 @@ export default {
   align-items: center;
 }
 .shadow {
-  box-shadow: 1px -2px 4px 4px rgba(0, 0, 0, 0.425);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 </style>

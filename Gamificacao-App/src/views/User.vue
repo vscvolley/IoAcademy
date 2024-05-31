@@ -34,7 +34,8 @@ export default {
       maxpontos: 0,
       email: 'nivel@gmail.com',
       nivel: 'oi',
-      nome: 'oi'
+      nome: 'oi',
+      showpopup: false
     }
   },
   methods: {
@@ -87,6 +88,25 @@ export default {
 </script>
 
 <template>
+  <div v-if="showpopup" class="back">
+    <div class="popup rounded">
+      <span class="close" @click="showpopup = false">&times;</span>
+      <p>Soma pontos e ganha ofertas!</p>
+      <p>Quanto mais pontos tiveres adequirido no total, maior é o teu ranking.</p>
+      <p>Quanto maior o teu ranking mais facil é de ganhar pontos!</p>
+      <p>Ranking (pontos por scan):</p>
+      <div id="classificacao">
+        <silver></silver>
+        <h4>1000 pontos</h4>
+        <gold class="mt-1"></gold>
+        <h4>2000 pontos</h4>
+        <diamond class="mt-1"></diamond>
+        <h4>3000 pontos</h4>
+        <star class="mt-1"></star>
+        <h4>4000 pontos</h4>
+      </div>
+    </div>
+  </div>
   <div class="d-grid justify-content-center mt-3" id="page">
     <div class="bg-white rounded text-center p-3">
       <img :src="foto" alt="foto" id="foto" />
@@ -96,7 +116,11 @@ export default {
         </h5>
         <div class="d-flex justify-content-left align-items-center mt-1 mb-1">
           <h5 id="ranking">Ranking:</h5>
-          <div id="categoria" class="d-flex text-center align-items-center">
+          <div
+            id="categoria"
+            class="d-flex text-center align-items-center"
+            @click="showpopup = true"
+          >
             <silver v-show="nivel == 'silver'"></silver>
             <gold v-show="nivel == 'gold'"></gold>
             <diamond v-show="nivel == 'diamond'"></diamond>
@@ -108,9 +132,9 @@ export default {
     </div>
     <div class="bg-white rounded text-right p-3 mt-4">
       <h2 class="text-center">Status</h2>
-      <h3>Total: {{ pontos }}</h3>
-      <h3>Maximo atingido: {{ maxpontos }}</h3>
-      <h3>Premios: {{ premios }}</h3>
+      <h3>Pontos: {{ pontos }}</h3>
+      <h3>Total Pontos: {{ maxpontos }}</h3>
+      <h3>Nº Premios: {{ premios }}</h3>
     </div>
     <div class="bg-white mt-3 rounded text-center" id="table">
       <h5 class="text-center mt-1">World Podium</h5>
@@ -158,5 +182,42 @@ export default {
 }
 #ranking {
   margin-right: 1rem;
+}
+
+.back {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.popup {
+  background-color: #f5f5f5;
+  margin: auto;
+  padding: 0.8em;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaaaaa;
+  margin-left: 90%;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+}
+#classificacao {
+  text-align: center;
 }
 </style>
