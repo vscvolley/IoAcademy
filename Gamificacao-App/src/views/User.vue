@@ -179,7 +179,7 @@ export default {
       <span class="close" @click="showpremios = false">&times;</span>
       <h4 class="mt-3 mb-1">Lista de prémios redimidos</h4>
       <div class="bg-white mt-3 rounded text-center" id="table1">
-        <b-table :items="lista1" :fields="fields" striped> </b-table>
+        <b-table :items="lista1" striped> </b-table>
       </div>
     </div>
   </div>
