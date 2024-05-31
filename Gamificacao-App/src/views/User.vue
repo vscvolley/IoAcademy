@@ -52,7 +52,6 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data)
           data.data.forEach((user) => {
             if (user.attributes.email == sessionStorage.getItem('email')) {
               const dados = {
