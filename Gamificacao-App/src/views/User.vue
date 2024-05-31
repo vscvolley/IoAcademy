@@ -154,7 +154,7 @@ export default {
           v-if="parabens == false"
           class="progress-bar bg-warning"
           id="progress-bar"
-          v-bind:style="{ width: this.progress + '%' }"
+          v-bind:style="{ width: progress + '%' }"
         ></div>
       </div>
       <p id="parabens" class="mt-3" v-if="parabens == true">Estas no topo da montanha, PARABÉNS!</p>
