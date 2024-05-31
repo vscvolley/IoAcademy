@@ -42,7 +42,21 @@ export default {
       progress: 0,
       lista: [],
       showpremios: false,
-      lista1: []
+      lista1: [],
+      fields: [
+        {
+          key: 'nome',
+          label: 'Nome'
+        },
+        {
+          key: 'pontos',
+          lable: 'Pontos'
+        },
+        {
+          key: 'nivel',
+          label: 'Nível'
+        }
+      ]
     }
   },
   methods: {
@@ -122,8 +136,8 @@ export default {
     <div class="popup rounded">
       <span class="close" @click="showpopup = false">&times;</span>
       <p>Soma pontos e ganha ofertas!</p>
-      <p>Quanto mais pontos tiveres adequirido no total, maior é o teu ranking.</p>
-      <p>Quanto maior o teu ranking mais facil é de ganhar pontos!</p>
+      <p>Quanto mais pontos tiveres no total, maior é o teu ranking.</p>
+      <p>Quanto maior o teu ranking mais fácil é de ganhar pontos!</p>
       <p class="mt-2">Ranking (pontos por scan):</p>
       <div id="classificacao">
         <silver></silver>
@@ -157,15 +171,15 @@ export default {
           v-bind:style="{ width: progress + '%' }"
         ></div>
       </div>
-      <p id="parabens" class="mt-3" v-if="parabens == true">Estas no topo da montanha, PARABÉNS!</p>
+      <p id="parabens" class="mt-3" v-if="parabens == true">Estás no topo da montanha, PARABÉNS!</p>
     </div>
   </div>
   <div id="listapremios" v-if="showpremios == true" class="back">
     <div class="popup rounded container">
       <span class="close" @click="showpremios = false">&times;</span>
-      <h4 class="mt-3 mb-1">Lista de premios redimidos</h4>
+      <h4 class="mt-3 mb-1">Lista de prémios redimidos</h4>
       <div class="bg-white mt-3 rounded text-center" id="table1">
-        <b-table :items="lista1" striped> </b-table>
+        <b-table :items="lista1" :fields="fields" striped> </b-table>
       </div>
     </div>
   </div>
@@ -193,7 +207,7 @@ export default {
       <h2 class="text-center">Status</h2>
       <h3>Pontos: {{ pontos }}</h3>
       <h3>Total Pontos: {{ maxpontos }}</h3>
-      <h3 @click="showpremios = true">Nº Premios <marca /> : {{ premios }}</h3>
+      <h3 @click="showpremios = true">Nº Prémios <marca /> : {{ premios }}</h3>
     </div>
     <div class="bg-white mt-3 rounded text-center" id="table">
       <h5 class="text-center mt-1">World Podium</h5>

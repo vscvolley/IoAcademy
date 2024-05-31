@@ -208,7 +208,7 @@ export default {
         <pontos class="pontos"></pontos>
         <div class="d-flex align-items-center text-center justify-content-center">
           <h6 id="proximo">
-            Proxima recompensa
+            Próxima recompensa
             <img src="" alt="" id="premio" />
           </h6>
         </div>
